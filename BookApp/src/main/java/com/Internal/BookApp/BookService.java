@@ -3,7 +3,6 @@ package com.Internal.BookApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -12,15 +11,6 @@ public class BookService {
 
     @Autowired
     private BookDAO dao;
-
-    @PostConstruct
-    public void init() {
-        try {
-            dao.createTable();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void addBook(Book book) throws SQLException {
         dao.insertBook(book);

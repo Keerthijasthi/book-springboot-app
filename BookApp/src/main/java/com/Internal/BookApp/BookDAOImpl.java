@@ -7,24 +7,11 @@ import java.util.*;
 @Repository
 public class BookDAOImpl implements BookDAO {
 
-    private final String JDBC_URL = "jdbc:h2:~/test";
-    private final String JDBC_USER = "sa";
-    private final String JDBC_PASS = "";
-
     private Connection getConnection() throws SQLException {
+        String JDBC_URL = "jdbc:h2:file:~/test";
+        String JDBC_USER = "sa";
+        String JDBC_PASS = "";
         return DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
-    }
-
-    @Override
-    public void createTable() throws SQLException {
-        String sql = "CREATE TABLE IF NOT EXISTS books (" +
-                "id INT PRIMARY KEY, " +
-                "title VARCHAR(255), " +
-                "author VARCHAR(255))";
-
-        try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-        }
     }
 
     @Override
