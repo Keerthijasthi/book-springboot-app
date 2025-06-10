@@ -13,6 +13,10 @@ public class BookService {
     private BookDAO dao;
 
     public void addBook(Book book) throws SQLException {
+        if (book.getId() < 0 || book.getId() > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid ID: must be a positive number within integer range.");
+        }
+
         dao.insertBook(book);
     }
 

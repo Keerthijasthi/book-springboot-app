@@ -1,6 +1,7 @@
 package com.Internal.BookApp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -14,9 +15,9 @@ public class BookController {
     private BookService service;
 
     @PostMapping
-    public String addBook(@RequestBody Book book) throws SQLException {
+    public ResponseEntity<String> addBook(@RequestBody Book book) throws SQLException{
         service.addBook(book);
-        return "Book added successfully!";
+        return ResponseEntity.ok("Book added successfully!");
     }
 
     @GetMapping

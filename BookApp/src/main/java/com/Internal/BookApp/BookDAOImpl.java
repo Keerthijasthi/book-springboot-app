@@ -16,22 +16,29 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public void insertBook(Book book) throws SQLException {
-        String check = "SELECT COUNT(*) FROM books WHERE id = ?";
+        if (bookExists(book.getId())) {
+            throw new IllegalArgumentException("Book with ID " + book.getId() + " already exists.");
+        }
+
         String insert = "INSERT INTO books (id, title, author) VALUES (?, ?, ?)";
         try (Connection conn = getConnection();
-             PreparedStatement checkStmt = conn.prepareStatement(check)) {
-            checkStmt.setInt(1, book.getId());
-            ResultSet rs = checkStmt.executeQuery();
-            rs.next();
+             PreparedStatement pstmt = conn.prepareStatement(insert)) {
+            pstmt.setInt(1, book.getId());
+            pstmt.setString(2, book.getTitle());
+            pstmt.setString(3, book.getAuthor());
+            pstmt.executeUpdate();
+        }
+    }
 
-            if (rs.getInt(1) == 0) {
-                try (PreparedStatement pstmt = conn.prepareStatement(insert)) {
-                    pstmt.setInt(1, book.getId());
-                    pstmt.setString(2, book.getTitle());
-                    pstmt.setString(3, book.getAuthor());
-                    pstmt.executeUpdate();
-                }
-            }
+    @Override
+    public boolean bookExists(int id) throws SQLException {
+        String query = "SELECT COUNT(*) FROM books WHERE id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            return rs.getInt(1) > 0;
         }
     }
 

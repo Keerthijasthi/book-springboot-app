@@ -9,4 +9,5 @@ public interface BookDAO {
     void updateBook(Book book) throws SQLException;
     void deleteBook(int id) throws SQLException;
     List<Book> getBook(String author) throws SQLException;
+    boolean bookExists(int id) throws SQLException;
 }
